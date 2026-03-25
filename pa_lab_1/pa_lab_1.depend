@@ -1,0 +1,56 @@
+# depslib dependency file v1.0
+1584205420 source:c:\users\dell\documents\pp\pa_lab_1\main.cpp
+	<iostream>
+
+1774470518 source:c:\users\dell\documents\pp\pa_lab_1\src\dtfecha.cpp
+	"DtFecha.h"
+
+1774470516 c:\users\dell\documents\pp\pa_lab_1\include\dtfecha.h
+
+1774470821 source:c:\users\dell\documents\pp\pa_lab_1\src\dtlibro.cpp
+	"DtLibro.h"
+
+1774470822 c:\users\dell\documents\pp\pa_lab_1\include\dtlibro.h
+	"DtMaterial.h"
+	<iostream>
+
+1774470717 c:\users\dell\documents\pp\pa_lab_1\include\dtmaterial.h
+	<string>
+
+1774470714 source:c:\users\dell\documents\pp\pa_lab_1\src\dtmaterial.cpp
+	"DtMaterial.h"
+
+1774471344 source:c:\users\dell\documents\pp\pa_lab_1\src\dtrevista.cpp
+	"DtRevista.h"
+
+1774471334 c:\users\dell\documents\pp\pa_lab_1\include\dtrevista.h
+	"DtMaterial.h"
+	<iostream>
+
+1774473484 source:c:\users\dell\documents\pp\pa_lab_1\src\lector.cpp
+	"Lector.h"
+
+1774473483 c:\users\dell\documents\pp\pa_lab_1\include\lector.h
+	<string>
+	"Prestamo.h"
+
+1774471276 c:\users\dell\documents\pp\pa_lab_1\include\prestamo.h
+	"DtFecha.h"
+	"Material.h"
+
+1774471285 c:\users\dell\documents\pp\pa_lab_1\include\material.h
+	<string>
+
+1774470509 source:c:\users\dell\documents\pp\pa_lab_1\src\libro.cpp
+	"Libro.h"
+	"DtLibro.h"
+
+1774470506 c:\users\dell\documents\pp\pa_lab_1\include\libro.h
+	"Material.h"
+
+1774470824 source:c:\users\dell\documents\pp\pa_lab_1\src\material.cpp
+	"Material.h"
+
+1774471346 source:c:\users\dell\documents\pp\pa_lab_1\src\prestamo.cpp
+	"Prestamo.h"
+

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="pa_lab_1" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/pa_lab_1" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/pa_lab_1" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="include/DtFecha.h" />
+		<Unit filename="include/DtLibro.h" />
+		<Unit filename="include/DtMaterial.h" />
+		<Unit filename="include/DtRevista.h" />
+		<Unit filename="include/Lector.h" />
+		<Unit filename="include/Libro.h" />
+		<Unit filename="include/Material.h" />
+		<Unit filename="include/Prestamo.h" />
+		<Unit filename="include/Revista.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/DtFecha.cpp" />
+		<Unit filename="src/DtLibro.cpp" />
+		<Unit filename="src/DtMaterial.cpp" />
+		<Unit filename="src/DtRevista.cpp" />
+		<Unit filename="src/Lector.cpp" />
+		<Unit filename="src/Libro.cpp" />
+		<Unit filename="src/Material.cpp" />
+		<Unit filename="src/Prestamo.cpp" />
+		<Unit filename="src/Revista.cpp" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
