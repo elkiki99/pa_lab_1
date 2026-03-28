@@ -14,6 +14,21 @@ const int MAX_MATERIALES = 100;
 Material** materiales = new Material*[MAX_MATERIALES];
 int topeMateriales = 0;
 
+// no se pide esta función, es para probar nomas que funca bien
+void imprimirArregloMateriales()
+{
+    for(int i = 0; i < topeMateriales; i++)
+    {
+        DtMaterial* dt = materiales[i]->getDtMaterial();
+
+        dt->imprimir();
+        cout << "------------------\n";
+
+        delete dt;
+    }
+}
+
+// agrega un nuevo material al array dinámico
 void agregarMaterial(DtMaterial* dtMaterial)
 {
     string codigo = dtMaterial->getCodigo();
@@ -23,7 +38,7 @@ void agregarMaterial(DtMaterial* dtMaterial)
         if(materiales[i]->getCodigo() == codigo)
         {
             cout << "Ya existe un material con ese código\n";
-            return; // 🔥 corta la función
+            return;
         }
     }
 
@@ -58,7 +73,7 @@ void agregarMaterial(DtMaterial* dtMaterial)
 
     materiales[topeMateriales++] = nuevo;
 
-    cout << "Material creado correctamente!\n";
+    cout << "\nMaterial creado correctamente!\n\n";
 }
 
 int main()
@@ -146,6 +161,7 @@ int main()
                 } while (tipoMaterial != "l" && tipoMaterial != "r");
 
                 agregarMaterial(dt); // agregamos el material dinámicamente pasandole el datatype
+                //imprimirArregloMateriales();
             }
         }
 
