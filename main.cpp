@@ -3,8 +3,63 @@
 #include <string>
 #include "include/Libro.h"
 #include "include/Revista.h"
+#include "include/DtLibro.h"
+#include "include/DtRevista.h"
+#include "include/DtMaterial.h"
 
 using namespace std;
+
+const int MAX_MATERIALES = 100;
+
+Material** materiales = new Material*[MAX_MATERIALES];
+int topeMateriales = 0;
+
+void agregarMaterial(DtMaterial* dtMaterial)
+{
+    string codigo = dtMaterial->getCodigo();
+
+    for(int i = 0; i < topeMateriales; i++)
+    {
+        if(materiales[i]->getCodigo() == codigo)
+        {
+            cout << "Ya existe un material con ese código\n";
+            return; // 🔥 corta la función
+        }
+    }
+
+    if(topeMateriales == MAX_MATERIALES)
+    {
+        cout << "Capacidad máxima alcanzada\n";
+        return;
+    }
+
+    Material* nuevo = nullptr;
+
+    if(DtLibro* l = dynamic_cast<DtLibro*>(dtMaterial))
+    {
+        nuevo = new Libro(
+            l->getCodigo(),
+            l->getTitulo(),
+            l->getAnioPublicacion(),
+            l->getAutor(),
+            l->getCantPaginas()
+        );
+    }
+    else if(DtRevista* r = dynamic_cast<DtRevista*>(dtMaterial))
+    {
+        nuevo = new Revista(
+            r->getCodigo(),
+            r->getTitulo(),
+            r->getAnioPublicacion(),
+            r->getNumeroEdicion(),
+            r->getEsMensual()
+        );
+    }
+
+    materiales[topeMateriales++] = nuevo;
+
+    cout << "Material creado correctamente!\n";
+}
 
 int main()
 {
@@ -25,21 +80,27 @@ int main()
             cout << "\nNúmero inválido\nIntente nuevamente: \n" << endl;
         }
         else {
+            if(numMenu == 1)
+            {
+
+            }
             if(numMenu == 6)
             {
-                cout << "\nIngrese un codigo: ";
                 string codigo;
+                string titulo;
+                int anioPublicacion;
+
+                cout << "\nIngrese un codigo: ";
                 cin >> codigo;
 
                 cout << "\nIngrese un título: ";
-                string titulo;
                 cin >> titulo;
 
                 cout << "\nIngrese un año de publicación: ";
-                int anioPublicacion;
                 cin >> anioPublicacion;
 
                 string tipoMaterial = "";
+                DtMaterial* dt = nullptr; // puntero a null del data type material
 
                 do
                 {
@@ -56,21 +117,16 @@ int main()
                         int cantPaginas;
                         cin >> cantPaginas;
 
-                        Libro* libro = new Libro(codigo, titulo, anioPublicacion, autor, cantPaginas);
-
-                        DtMaterial* dt_libro = libro->getDtMaterial();
-
-                        cout << "" << endl;
-                        dt_libro->imprimir();
-                        cout << "" << endl;
+                        dt = new DtLibro(codigo, titulo, anioPublicacion, autor, cantPaginas);
 
                     } else if(tipoMaterial == "r") {
 
-                        cout << "\nIngrese el número de edición: ";
                         int numeroEdicion;
-                        cin >> numeroEdicion;
-
                         string esMensual = "";
+                        bool esMensualBool;
+
+                        cout << "\nIngrese el número de edición: ";
+                        cin >> numeroEdicion;
 
                         do
                         {
@@ -79,23 +135,17 @@ int main()
 
                         } while(esMensual != "si" && esMensual != "no");
 
-                        bool esMensualBool;
-
                         if(esMensual == "si")
                             esMensualBool = true;
                         else
                             esMensualBool = false;
 
-                        Revista* revista = new Revista(codigo, titulo, anioPublicacion, numeroEdicion, esMensualBool);
-
-                        DtMaterial* dt_revista = revista->getDtMaterial();
-
-                        cout << "" << endl;
-                        dt_revista->imprimir();
-                        cout << "" << endl;
+                        dt = new DtRevista(codigo, titulo, anioPublicacion, numeroEdicion, esMensualBool);
                     }
 
                 } while (tipoMaterial != "l" && tipoMaterial != "r");
+
+                agregarMaterial(dt); // agregamos el material dinámicamente pasandole el datatype
             }
         }
 
