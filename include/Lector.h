@@ -21,6 +21,7 @@ class Lector {
         Lector(string ci, string nombre, DtFecha* fecha);
         virtual ~Lector();
 
+        // Getters
         string getCI();
         string getNombre();
         DtFecha getFechaRegistro();

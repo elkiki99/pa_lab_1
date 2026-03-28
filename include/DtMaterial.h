@@ -5,19 +5,24 @@
 using namespace std;
 
 class DtMaterial {
-    protected:
+    private:
         string codigo;
         string titulo;
-        int anio;
+        int anioPublicacion;
+        float multaBase;
+        string tipoMaterial;
 
     public:
-        DtMaterial(string codigo, string titulo, int anio);
+        DtMaterial(string codigo, string titulo, int anioPublicacion);
         virtual ~DtMaterial();
 
+        //Getters
         string getCodigo();
         string getTitulo();
-        int getAnio();
+        int getAnioPublicacion();
+        string getTipoMaterial();
 
+        float getMultaBase();
         virtual void imprimir() = 0;
 };
 

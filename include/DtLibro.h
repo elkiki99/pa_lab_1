@@ -10,7 +10,12 @@ class DtLibro : public DtMaterial {
         int paginas;
 
     public:
-        DtLibro(string codigo, string titulo, int anio, string autor, int paginas);
+        DtLibro(string codigo, string titulo, int anioPublicacion, string autor, int paginas);
+        virtual ~ DtLibro();
+
+        //Getters
+        string getAutor();
+        int getCantPaginas();
 
         void imprimir() override;
 };

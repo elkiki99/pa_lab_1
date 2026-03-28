@@ -1,7 +1,6 @@
 #ifndef DTFECHA_H
 #define DTFECHA_H
 
-
 class DtFecha {
     private:
         int dia;
@@ -15,7 +14,7 @@ class DtFecha {
         int getMes();
         int getAnio();
 
-        bool esAnterior(DtFecha* otra);
+        //bool esAnterior(DtFecha* otra);
 };
 
 #endif // DTFECHA_H

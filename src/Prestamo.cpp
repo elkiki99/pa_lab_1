@@ -1,7 +1,7 @@
 #include "Prestamo.h"
 
-Prestamo::Prestamo(DtFecha* fecha, int dias, Material* material) {
-    this->fecha = fecha;
+Prestamo::Prestamo(DtFecha* fechaPrestamo, int dias, Material* material) {
+    this->fechaPrestamo = fechaPrestamo;
     this->diasPermitidos = dias;
     this->material = material;
 }
@@ -9,9 +9,15 @@ Prestamo::Prestamo(DtFecha* fecha, int dias, Material* material) {
 Prestamo::~Prestamo() {}
 
 DtFecha* Prestamo::getFecha() {
-    return fecha;
+    return fechaPrestamo;
+}
+
+int Prestamo::getDiasPermitidos() {
+    return diasPermitidos;
 }
 
 Material* Prestamo::getMaterial() {
     return material;
 }
+
+

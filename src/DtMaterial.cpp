@@ -1,9 +1,9 @@
 #include "DtMaterial.h"
 
-DtMaterial::DtMaterial(string codigo, string titulo, int anio) {
+DtMaterial::DtMaterial(string codigo, string titulo, int anioPublicacion) {
     this->codigo = codigo;
     this->titulo = titulo;
-    this->anio = anio;
+    this->anioPublicacion = anioPublicacion;
 }
 
 DtMaterial::~DtMaterial() {}
@@ -16,6 +16,6 @@ string DtMaterial::getTitulo() {
     return titulo;
 }
 
-int DtMaterial::getAnio() {
-    return anio;
+int DtMaterial::getAnioPublicacion() {
+    return anioPublicacion;
 }

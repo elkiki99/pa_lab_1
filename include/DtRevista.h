@@ -10,7 +10,12 @@ class DtRevista : public DtMaterial {
         bool mensual;
 
     public:
-        DtRevista(string codigo, string titulo, int anio, int numero, bool mensual);
+        DtRevista(string codigo, string titulo, int anioPublicacion, int numero, bool mensual);
+        virtual ~DtRevista();
+
+        //Getters
+        int getNumeroEdicion();
+        bool getEsMensual();
 
         void imprimir() override;
 };
