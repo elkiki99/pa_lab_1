@@ -13,6 +13,10 @@ string Lector::getCI() {
     return ci;
 }
 
+string Lector::getNombre() {
+    return nombre;
+}
+
 void Lector::agregarPrestamo(Prestamo* p) {
     if (cantPrestamos < MAX_PRESTAMOS) {
         prestamos[cantPrestamos++] = p;
