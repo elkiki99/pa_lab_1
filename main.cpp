@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string>
 #include "include/Libro.h"
+#include "include/Lector.h"
 #include "include/Revista.h"
 #include "include/DtLibro.h"
 #include "include/DtRevista.h"
@@ -10,6 +11,10 @@
 using namespace std;
 
 const int MAX_MATERIALES = 100;
+const int MAX_LECTORES = 100;
+
+Lector** lectores = new Lector*[MAX_LECTORES];
+int cantLectores = 0;
 
 Material** materiales = new Material*[MAX_MATERIALES];
 int cantMateriales = 0;
@@ -25,6 +30,18 @@ void imprimirArregloMateriales()
         cout << "------------------\n";
 
         delete dt;
+    }
+}
+
+void imprimirArregloLectores()
+{
+    for(int i = 0; i < cantLectores; i++)
+    {
+        Lector* lector = lectores[i];
+
+        cout << lector->getCI();
+        cout << lector->getNombre();
+        cout << "------------------\n";
     }
 }
 
@@ -76,6 +93,30 @@ void agregarMaterial(DtMaterial* dtMaterial)
     cout << "\nMaterial creado correctamente!\n\n";
 }
 
+void registrarLector(string ci, string nombre, DtFecha* fechaRegistro)
+{
+    for(int i = 0; i < cantLectores; i++)
+    {
+        if(lectores[i]->getCI() == ci)
+        {
+            cout << "Ya existe un lector con esa CI\n";
+            return;
+        }
+    }
+
+    if(cantLectores == MAX_LECTORES)
+    {
+        cout << "Capacidad máxima alcanzada\n";
+        return;
+    }
+
+    Lector* nuevoLector = new Lector(ci, nombre, fechaRegistro);
+
+    lectores[cantLectores++] = nuevoLector;
+
+    cout << "\nNuevo lector registrado correctamente!\n\n";
+}
+
 int main()
 {
     bool salir = false;
@@ -97,6 +138,31 @@ int main()
         else {
             if(numMenu == 1)
             {
+                string ci;
+                string nombre;
+                int dia;
+                int mes;
+                int anio;
+
+                cout << "\nIngrese CI: ";
+                cin >> ci;
+
+                cout << "\nIngrese un nombre: ";
+                cin >> nombre;
+
+                cout << "\nIngrese día de registro: ";
+                cin >> dia;
+
+                cout << "\nIngrese mes de registro: ";
+                cin >> mes;
+
+                cout << "\nIngrese año de registro: ";
+                cin >> anio;
+
+                DtFecha* dt_fecha = new DtFecha(dia, mes, anio);
+
+                registrarLector(ci, nombre, dt_fecha);
+                imprimirArregloLectores();
 
             }
             if(numMenu == 6)
