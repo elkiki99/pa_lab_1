@@ -12,12 +12,12 @@ using namespace std;
 const int MAX_MATERIALES = 100;
 
 Material** materiales = new Material*[MAX_MATERIALES];
-int topeMateriales = 0;
+int cantMateriales = 0;
 
 // no se pide esta función, es para probar nomas que funca bien jaja
 void imprimirArregloMateriales()
 {
-    for(int i = 0; i < topeMateriales; i++)
+    for(int i = 0; i < cantMateriales; i++)
     {
         DtMaterial* dt = materiales[i]->getDtMaterial();
 
@@ -33,7 +33,7 @@ void agregarMaterial(DtMaterial* dtMaterial)
 {
     string codigo = dtMaterial->getCodigo();
 
-    for(int i = 0; i < topeMateriales; i++)
+    for(int i = 0; i < cantMateriales; i++)
     {
         if(materiales[i]->getCodigo() == codigo)
         {
@@ -42,7 +42,7 @@ void agregarMaterial(DtMaterial* dtMaterial)
         }
     }
 
-    if(topeMateriales == MAX_MATERIALES)
+    if(cantMateriales == MAX_MATERIALES)
     {
         cout << "Capacidad máxima alcanzada\n";
         return;
@@ -71,7 +71,7 @@ void agregarMaterial(DtMaterial* dtMaterial)
         );
     }
 
-    materiales[topeMateriales++] = nuevo;
+    materiales[cantMateriales++] = nuevo;
 
     cout << "\nMaterial creado correctamente!\n\n";
 }
@@ -161,7 +161,7 @@ int main()
                 } while (tipoMaterial != "l" && tipoMaterial != "r");
 
                 agregarMaterial(dt); // agregamos el material dinámicamente pasandole el datatype
-                //imprimirArregloMateriales();
+                imprimirArregloMateriales();
             }
         }
 
