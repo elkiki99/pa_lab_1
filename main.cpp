@@ -14,7 +14,7 @@ const int MAX_MATERIALES = 100;
 Material** materiales = new Material*[MAX_MATERIALES];
 int topeMateriales = 0;
 
-// no se pide esta función, es para probar nomas que funca bien
+// no se pide esta función, es para probar nomas que funca bien jaja
 void imprimirArregloMateriales()
 {
     for(int i = 0; i < topeMateriales; i++)
