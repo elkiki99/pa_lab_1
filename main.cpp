@@ -15,7 +15,7 @@ Material** materiales = new Material*[MAX_MATERIALES];
 int cantMateriales = 0;
 
 // no se pide esta función, es para probar nomas que funca bien jaja
-void imprimirArregloMateriales()
+void imprimirArregloMateriales()//67
 {
     for(int i = 0; i < cantMateriales; i++)
     {
