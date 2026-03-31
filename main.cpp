@@ -27,7 +27,7 @@ void imprimirArregloMateriales()
         DtMaterial* dt = materiales[i]->getDtMaterial();
 
         dt->imprimir();
-        cout << "------------------\n";
+        cout << "\n------------------\n" << endl;
 
         delete dt;
     }
@@ -39,8 +39,8 @@ void imprimirArregloLectores()
     {
         Lector* lector = lectores[i];
 
-        cout << lector->getCI() << endl;
-        cout << lector->getNombre() << endl;
+        cout << "- CI: " << lector->getCI() << endl;
+        cout << "- Nombre: " << lector->getNombre() << endl;
         cout << "------------------\n";
     }
 }
@@ -59,23 +59,38 @@ void imprimirPrestamos()
 
         if(cant == 0)
         {
-            cout << "  (sin préstamos)\n";
+            cout << "\t(sin préstamos)\n";
         }
 
         for(int j = 0; j < cant; j++)
         {
             Prestamo* p = prestamos[j];
 
-            Material* m = p->getMaterial(); // 👈 asumo que lo tenés
+            Material* m = p->getMaterial();
 
-            cout << "  Material: " << m->getCodigo()
+            cout << "\tMaterial: " << m->getCodigo()
                  << " - " << m->getTitulo() << endl;
 
-            cout << "  Dias permitidos: " << p->getDiasPermitidos() << endl;
+            cout << "\tDias permitidos: " << p->getDiasPermitidos() << endl;
 
-            cout << "  ------------------\n";
+            cout << "\t------------------\n";
         }
     }
+}
+
+bool fechaEsMenorA(DtFecha* a, DtFecha* b)
+{
+    if(a->getAnio() < b->getAnio())
+        return true;
+    else if(a->getAnio() > b->getAnio())
+        return false;
+
+    if(a->getMes() < b->getMes())
+        return true;
+    else if(a->getMes() > b->getMes())
+        return false;
+
+    return a->getDia() < b->getDia();
 }
 
 void agregarMaterial(DtMaterial* dtMaterial)
@@ -86,14 +101,14 @@ void agregarMaterial(DtMaterial* dtMaterial)
     {
         if(materiales[i]->getCodigo() == codigo)
         {
-            cout << "Ya existe un material con ese código\n";
+            cout << "\nYa existe un material con ese código\n\n";
             return;
         }
     }
 
     if(cantMateriales == MAX_MATERIALES)
     {
-        cout << "Capacidad máxima alcanzada\n";
+        cout << "\nCapacidad máxima alcanzada\n\n";
         return;
     }
 
@@ -123,6 +138,7 @@ void agregarMaterial(DtMaterial* dtMaterial)
     materiales[cantMateriales++] = nuevo;
 
     cout << "\nMaterial creado correctamente!\n\n";
+    imprimirArregloMateriales();
 }
 
 void registrarLector(string ci, string nombre, DtFecha* fechaRegistro)
@@ -178,22 +194,20 @@ void agregarPrestamo(string ci, string codigoMaterial, DtFecha* fechaPrestamo, i
      }
 
      if(!existeLector && !existeMaterial)
-        cout << "\nNo existe ni lector ni material para los datos ingresados";
+        cout << "\nNo existe ni lector ni material para los datos ingresados\n";
      else if(!existeLector && existeMaterial)
-        cout << "\nNo existe lector para el CI ingresado";
+        cout << "\nNo existe lector para el CI ingresado\n";
      else if(existeLector && !existeMaterial)
-        cout << "\nNo existe material para el código ingresado";
+        cout << "\nNo existe material para el código ingresado\n";
      else
      {
          Prestamo* nuevoPrestamo = new Prestamo(fechaPrestamo, diasPermitidos, material);
 
          lector->agregarPrestamo(nuevoPrestamo);
-
-         imprimirPrestamos();
      }
 }
 
-DtMaterial** obtenerMaterialesPrestados(string ci)
+DtMaterial** obtenerMaterialesPrestados(string ci, int& cantMateriales)
 {
     bool existeLector = false;
     Lector* lector = nullptr;
@@ -211,26 +225,21 @@ DtMaterial** obtenerMaterialesPrestados(string ci)
     if(!existeLector)
     {
         cout << "\nNo existe lector para el CI ingresado";
+        cantMateriales = 0;
         return nullptr;
     }
     else
     {
-        int cant = 0;
-        cant = lector->getCantPrestamos();
+        cantMateriales = lector->getCantPrestamos();
         Prestamo** prestamos_lector = lector->getPrestamos();
-        DtMaterial** materiales_prestados = new DtMaterial*[cant];
+        DtMaterial** materiales_prestados = new DtMaterial*[cantMateriales];
 
-        for(int i = 0; i < cant ; i++)
+        for(int i = 0; i < cantMateriales ; i++)
         {
             materiales_prestados[i] = prestamos_lector[i]->getMaterial()->getDtMaterial();
         }
 
-        for(int i = 0; i < lector->getCantPrestamos(); i++)
-        {
-            cout << materiales_prestados[i]->getCodigo() << endl;
-            cout << materiales_prestados[i]->getTitulo() << endl;
-        }
-
+        imprimirPrestamos();
         return materiales_prestados;
     }
 }
@@ -301,11 +310,54 @@ float consultarMultaMaterial(string ci, string codigoMaterial, int diasAtraso)
          }
          else
          {
-             cout << material->calcularMulta(diasAtraso) << endl;
+             cout << "Multa: $" << material->calcularMulta(diasAtraso) << endl;
              return material->calcularMulta(diasAtraso);
          }
      }
 }
+
+DtMaterial** verPrestamosAntesDeFecha(string ci, DtFecha* fecha, int& cantPrestamos)
+{
+    bool existeLector = false;
+    Lector* lector = nullptr;
+
+    for(int i = 0; i < cantLectores; i++)
+    {
+        if(lectores[i]->getCI() == ci)
+        {
+            existeLector = true;
+            lector = lectores[i];
+            break;
+        }
+    }
+
+    if(!existeLector)
+    {
+        cout << "\nNo existe lector para el CI ingresado";
+        cantPrestamos = 0;
+        return nullptr;
+    }
+    else
+    {
+        cantPrestamos = lector->getCantPrestamos();
+        Prestamo** prestamos_lector = lector->getPrestamos();
+        DtMaterial** materiales_antes_de_fecha = new DtMaterial*[cantPrestamos];
+        int j = 0;
+
+        for(int i = 0; i < cantPrestamos; i++)
+            if(fechaEsMenorA(prestamos_lector[i]->getFecha(), fecha))
+                materiales_antes_de_fecha[j++] = prestamos_lector[i]->getMaterial()->getDtMaterial();
+
+        for(int i = 0; i < j; i++)
+        {
+            cout << materiales_antes_de_fecha[i]->getCodigo() << endl;
+            cout << materiales_antes_de_fecha[i]->getTitulo() << endl;
+        }
+
+        return materiales_antes_de_fecha;
+    }
+}
+
 
 int main()
 {
@@ -316,7 +368,7 @@ int main()
 
     do
     {
-        cout << "\n1) Registrar lector \n2) Agregar préstamo \n3) Obtener materiales prestados \n4) Consultar multa de material \n5) Ver préstamos antes de fecha \n6) Agregar material \n0) Salir \nOpción: ";
+        cout << "\n\n1) Registrar lector \n2) Agregar préstamo \n3) Obtener materiales prestados \n4) Consultar multa de material \n5) Ver préstamos antes de fecha \n6) Agregar material \n0) Salir \nOpción: ";
         cin >> numMenu;
 
         if(numMenu == 0)
@@ -325,7 +377,8 @@ int main()
         {
             cout << "\nNúmero inválido\nIntente nuevamente: \n" << endl;
         }
-        else {
+        else
+        {
             if(numMenu == 1)
             {
                 string ci;
@@ -389,11 +442,12 @@ int main()
             else if (numMenu == 3)
             {
                 string ci;
+                int cantPrestamos;
 
                 cout << "\nIngrese una cédula válida: ";
                 cin >> ci;
 
-                obtenerMaterialesPrestados(ci);
+                obtenerMaterialesPrestados(ci, cantPrestamos);
             }
             else if (numMenu == 4)
             {
@@ -412,6 +466,30 @@ int main()
 
                 consultarMultaMaterial(ci, codigoMaterial, diasAtraso);
             }
+            else if (numMenu == 5)
+            {
+                string ci;
+                int dia;
+                int mes;
+                int anio;
+                int cantPrestamos;
+
+                cout << "\nIngrese CI: ";
+                cin >> ci;
+
+                cout << "\nIngrese día límite: ";
+                cin >> dia;
+
+                cout << "\nIngrese mes límite: ";
+                cin >> mes;
+
+                cout << "\nIngrese año límite: ";
+                cin >> anio;
+
+                DtFecha* dt_fecha = new DtFecha(dia, mes, anio);
+
+                verPrestamosAntesDeFecha(ci, dt_fecha, cantPrestamos);
+            }
             else if (numMenu == 6)
             {
                 string codigo;
@@ -428,7 +506,7 @@ int main()
                 cin >> anioPublicacion;
 
                 string tipoMaterial = "";
-                DtMaterial* dt = nullptr; // puntero a null del data type material
+                DtMaterial* dt = nullptr;
 
                 do
                 {
@@ -473,8 +551,7 @@ int main()
 
                 } while (tipoMaterial != "l" && tipoMaterial != "r");
 
-                agregarMaterial(dt); // agregamos el material dinámicamente pasandole el datatype
-                imprimirArregloMateriales();
+                agregarMaterial(dt);
             }
         }
 
