@@ -27,7 +27,7 @@ void imprimirArregloMateriales()
         DtMaterial* dt = materiales[i]->getDtMaterial();
 
         dt->imprimir();
-        cout << "------------------\n";
+        cout << "\n------------------\n" << endl;
 
         delete dt;
     }
@@ -39,8 +39,8 @@ void imprimirArregloLectores()
     {
         Lector* lector = lectores[i];
 
-        cout << lector->getCI() << endl;
-        cout << lector->getNombre() << endl;
+        cout << "- CI: " << lector->getCI() << endl;
+        cout << "- Nombre: " << lector->getNombre() << endl;
         cout << "------------------\n";
     }
 }
@@ -59,21 +59,21 @@ void imprimirPrestamos()
 
         if(cant == 0)
         {
-            cout << "  (sin préstamos)\n";
+            cout << "\t(sin préstamos)\n";
         }
 
         for(int j = 0; j < cant; j++)
         {
             Prestamo* p = prestamos[j];
 
-            Material* m = p->getMaterial(); // 👈 asumo que lo tenés
+            Material* m = p->getMaterial();
 
-            cout << "  Material: " << m->getCodigo()
+            cout << "\tMaterial: " << m->getCodigo()
                  << " - " << m->getTitulo() << endl;
 
-            cout << "  Dias permitidos: " << p->getDiasPermitidos() << endl;
+            cout << "\tDias permitidos: " << p->getDiasPermitidos() << endl;
 
-            cout << "  ------------------\n";
+            cout << "\t------------------\n";
         }
     }
 }
@@ -101,14 +101,14 @@ void agregarMaterial(DtMaterial* dtMaterial)
     {
         if(materiales[i]->getCodigo() == codigo)
         {
-            cout << "Ya existe un material con ese código\n";
+            cout << "\nYa existe un material con ese código\n\n";
             return;
         }
     }
 
     if(cantMateriales == MAX_MATERIALES)
     {
-        cout << "Capacidad máxima alcanzada\n";
+        cout << "\nCapacidad máxima alcanzada\n\n";
         return;
     }
 
@@ -138,6 +138,7 @@ void agregarMaterial(DtMaterial* dtMaterial)
     materiales[cantMateriales++] = nuevo;
 
     cout << "\nMaterial creado correctamente!\n\n";
+    imprimirArregloMateriales();
 }
 
 void registrarLector(string ci, string nombre, DtFecha* fechaRegistro)
@@ -193,18 +194,16 @@ void agregarPrestamo(string ci, string codigoMaterial, DtFecha* fechaPrestamo, i
      }
 
      if(!existeLector && !existeMaterial)
-        cout << "\nNo existe ni lector ni material para los datos ingresados";
+        cout << "\nNo existe ni lector ni material para los datos ingresados\n";
      else if(!existeLector && existeMaterial)
-        cout << "\nNo existe lector para el CI ingresado";
+        cout << "\nNo existe lector para el CI ingresado\n";
      else if(existeLector && !existeMaterial)
-        cout << "\nNo existe material para el código ingresado";
+        cout << "\nNo existe material para el código ingresado\n";
      else
      {
          Prestamo* nuevoPrestamo = new Prestamo(fechaPrestamo, diasPermitidos, material);
 
          lector->agregarPrestamo(nuevoPrestamo);
-
-         imprimirPrestamos();
      }
 }
 
@@ -240,12 +239,7 @@ DtMaterial** obtenerMaterialesPrestados(string ci, int& cantMateriales)
             materiales_prestados[i] = prestamos_lector[i]->getMaterial()->getDtMaterial();
         }
 
-        for(int i = 0; i < cantMateriales; i++)
-        {
-            cout << materiales_prestados[i]->getCodigo() << endl;
-            cout << materiales_prestados[i]->getTitulo() << endl;
-        }
-
+        imprimirPrestamos();
         return materiales_prestados;
     }
 }
@@ -374,7 +368,7 @@ int main()
 
     do
     {
-        cout << "\n1) Registrar lector \n2) Agregar préstamo \n3) Obtener materiales prestados \n4) Consultar multa de material \n5) Ver préstamos antes de fecha \n6) Agregar material \n0) Salir \nOpción: ";
+        cout << "\n\n1) Registrar lector \n2) Agregar préstamo \n3) Obtener materiales prestados \n4) Consultar multa de material \n5) Ver préstamos antes de fecha \n6) Agregar material \n0) Salir \nOpción: ";
         cin >> numMenu;
 
         if(numMenu == 0)
@@ -383,7 +377,8 @@ int main()
         {
             cout << "\nNúmero inválido\nIntente nuevamente: \n" << endl;
         }
-        else {
+        else
+        {
             if(numMenu == 1)
             {
                 string ci;
@@ -447,11 +442,12 @@ int main()
             else if (numMenu == 3)
             {
                 string ci;
+                int cantPrestamos;
 
                 cout << "\nIngrese una cédula válida: ";
                 cin >> ci;
 
-                obtenerMaterialesPrestados(ci, cantMateriales);
+                obtenerMaterialesPrestados(ci, cantPrestamos);
             }
             else if (numMenu == 4)
             {
@@ -556,7 +552,6 @@ int main()
                 } while (tipoMaterial != "l" && tipoMaterial != "r");
 
                 agregarMaterial(dt);
-                imprimirArregloMateriales();
             }
         }
 

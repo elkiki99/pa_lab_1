@@ -18,9 +18,9 @@ bool DtRevista::getEsMensual() {
 }
 
 void DtRevista::imprimir() {
-    cout << "- Codigo: " << getCodigo() << endl;
-    cout << "- Titulo: " << getTitulo() << endl;
-    cout << "- Año: " << getAnioPublicacion() << endl;
-    cout << "- Numero: " << getNumeroEdicion() << endl;
+    cout << "- Código: " << getCodigo() << endl;
+    cout << "- Título: " << getTitulo() << endl;
+    cout << "- Año de publicación: " << getAnioPublicacion() << endl;
+    cout << "- Número de edición: " << getNumeroEdicion() << endl;
     cout << "- Es mensual: " << (getEsMensual() ? "Si" : "No") << endl;
 }

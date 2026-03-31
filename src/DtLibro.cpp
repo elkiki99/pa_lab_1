@@ -19,9 +19,9 @@ int DtLibro::getCantPaginas() {
 }
 
 void DtLibro::imprimir() {
-    cout << "- Codigo: " << getCodigo() << endl;
-    cout << "- Titulo: " << getTitulo() << endl;
-    cout << "- Año: " << getAnioPublicacion() << endl;
+    cout << "- Código: " << getCodigo() << endl;
+    cout << "- Título: " << getTitulo() << endl;
+    cout << "- Año de publicación: " << getAnioPublicacion() << endl;
     cout << "- Autor: " << getAutor() << endl;
-    cout << "- Paginas: " << getCantPaginas() << endl;
+    cout << "- Cantidad de páginas: " << getCantPaginas() << endl;
 }
