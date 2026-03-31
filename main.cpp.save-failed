@@ -78,6 +78,8 @@ void imprimirPrestamos()
     }
 }
 
+
+
 void agregarMaterial(DtMaterial* dtMaterial)
 {
     string codigo = dtMaterial->getCodigo();
@@ -264,20 +266,11 @@ float consultarMultaMaterial(string ci, string codigoMaterial, int diasAtraso)
      }
 
      if(!existeLector && !existeMaterial)
-     {
         cout << "\nNo existe ni lector ni material para los datos ingresados";
-        return -1;
-     }
      else if(!existeLector && existeMaterial)
-     {
         cout << "\nNo existe lector para el CI ingresado";
-        return -1;
-     }
      else if(existeLector && !existeMaterial)
-     {
         cout << "\nNo existe material para el código ingresado";
-        return -1;
-     }
      else
      {
          int cant = 0;
@@ -295,15 +288,13 @@ float consultarMultaMaterial(string ci, string codigoMaterial, int diasAtraso)
          }
 
          if(!existePrestamo)
-         {
             cout << "\nNo existe un préstamo asociado a este material y este lector";
-            return -1;
-         }
          else
          {
              cout << material->calcularMulta(diasAtraso) << endl;
-             return material->calcularMulta(diasAtraso);
+             material->calcularMulta(diasAtraso);
          }
+
      }
 }
 
