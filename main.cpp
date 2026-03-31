@@ -78,8 +78,6 @@ void imprimirPrestamos()
     }
 }
 
-
-
 void agregarMaterial(DtMaterial* dtMaterial)
 {
     string codigo = dtMaterial->getCodigo();
