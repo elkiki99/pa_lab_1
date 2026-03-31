@@ -55,7 +55,8 @@ void imprimirPrestamos()
         cout << "\nLector: " << lector->getCI() << " - " << lector->getNombre() << endl;
 
         int cant;
-        Prestamo** prestamos = lector->getPrestamos(cant);
+        cant = lector->getCantPrestamos();
+        Prestamo** prestamos = lector->getPrestamos();
 
         if(cant == 0)
         {
@@ -194,6 +195,48 @@ void agregarPrestamo(string ci, string codigoMaterial, DtFecha* fechaPrestamo, i
      }
 }
 
+DtMaterial** obtenerMaterialesPrestados(string ci)
+{
+    bool existeLector = false;
+    Lector* lector = nullptr;
+
+    for(int i = 0; i < cantLectores; i++)
+    {
+        if(lectores[i]->getCI() == ci)
+        {
+            existeLector = true;
+            lector = lectores[i];
+            break;
+        }
+    }
+
+    if(!existeLector)
+    {
+        cout << "\nNo existe lector para el CI ingresado";
+        return nullptr;
+    }
+    else
+    {
+        int cant = 0;
+        cant = lector->getCantPrestamos();
+        Prestamo** prestamos_lector = lector->getPrestamos();
+        DtMaterial** materiales_prestados = new DtMaterial*[cant];
+
+        for(int i = 0; i < cant ; i++)
+        {
+            materiales_prestados[i] = prestamos_lector[i]->getMaterial()->getDtMaterial();
+        }
+
+        for(int i = 0; i < lector->getCantPrestamos(); i++)
+        {
+            cout << materiales_prestados[i]->getCodigo() << endl;
+            cout << materiales_prestados[i]->getTitulo() << endl;
+        }
+
+        return materiales_prestados;
+    }
+}
+
 int main()
 {
     bool salir = false;
@@ -272,6 +315,15 @@ int main()
                 DtFecha* dt_fecha = new DtFecha(dia, mes, anio);
 
                 agregarPrestamo(ci, codigoMaterial, dt_fecha, diasPermitidos);
+            }
+            else if (numMenu == 3)
+            {
+                string ci;
+
+                cout << "\nIngrese una cédula válida: ";
+                cin >> ci;
+
+                obtenerMaterialesPrestados(ci);
             }
             else if(numMenu == 6)
             {

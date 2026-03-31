@@ -17,13 +17,16 @@ string Lector::getNombre() {
     return nombre;
 }
 
+int Lector::getCantPrestamos() {
+    return cantPrestamos;
+}
+
 void Lector::agregarPrestamo(Prestamo* p) {
     if (cantPrestamos < MAX_PRESTAMOS) {
         prestamos[cantPrestamos++] = p;
     }
 }
 
-Prestamo** Lector::getPrestamos(int& cantidad) {
-    cantidad = cantPrestamos;
+Prestamo** Lector::getPrestamos() {
     return prestamos;
 }

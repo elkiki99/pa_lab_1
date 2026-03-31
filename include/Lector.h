@@ -25,10 +25,11 @@ class Lector {
         string getCI();
         string getNombre();
         DtFecha getFechaRegistro();
+        int getCantPrestamos();
 
         void agregarPrestamo(Prestamo* p);
 
-        Prestamo** getPrestamos(int& cantidad);
+        Prestamo** getPrestamos();
 };
 
 #endif // LECTOR_H
