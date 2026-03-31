@@ -4,6 +4,7 @@
 #include "include/Libro.h"
 #include "include/Lector.h"
 #include "include/Revista.h"
+#include "include/Prestamo.h"
 #include "include/DtLibro.h"
 #include "include/DtRevista.h"
 #include "include/DtMaterial.h"
@@ -39,9 +40,41 @@ void imprimirArregloLectores()
     {
         Lector* lector = lectores[i];
 
-        cout << lector->getCI();
-        cout << lector->getNombre();
+        cout << lector->getCI() << endl;
+        cout << lector->getNombre() << endl;
         cout << "------------------\n";
+    }
+}
+
+void imprimirPrestamos()
+{
+    for(int i = 0; i < cantLectores; i++)
+    {
+        Lector* lector = lectores[i];
+
+        cout << "\nLector: " << lector->getCI() << " - " << lector->getNombre() << endl;
+
+        int cant;
+        Prestamo** prestamos = lector->getPrestamos(cant);
+
+        if(cant == 0)
+        {
+            cout << "  (sin préstamos)\n";
+        }
+
+        for(int j = 0; j < cant; j++)
+        {
+            Prestamo* p = prestamos[j];
+
+            Material* m = p->getMaterial(); // 👈 asumo que lo tenés
+
+            cout << "  Material: " << m->getCodigo()
+                 << " - " << m->getTitulo() << endl;
+
+            cout << "  Dias permitidos: " << p->getDiasPermitidos() << endl;
+
+            cout << "  ------------------\n";
+        }
     }
 }
 
@@ -117,6 +150,50 @@ void registrarLector(string ci, string nombre, DtFecha* fechaRegistro)
     cout << "\nNuevo lector registrado correctamente!\n\n";
 }
 
+void agregarPrestamo(string ci, string codigoMaterial, DtFecha* fechaPrestamo, int diasPermitidos)
+{
+    bool existeLector = false;
+    Lector* lector = nullptr;
+    Material* material = nullptr;
+
+    for(int i = 0; i < cantLectores; i++)
+    {
+        if(lectores[i]->getCI() == ci)
+        {
+            existeLector = true;
+            lector = lectores[i];
+            break;
+        }
+    }
+
+    bool existeMaterial = false;
+
+    for(int i = 0; i < cantMateriales; i++)
+    {
+        if(materiales[i]->getCodigo() == codigoMaterial)
+        {
+            existeMaterial = true;
+            material = materiales[i];
+            break;
+        }
+     }
+
+     if(!existeLector && !existeMaterial)
+        cout << "\nNo existe ni lector ni material para los datos ingresados";
+     else if(!existeLector && existeMaterial)
+        cout << "\nNo existe lector para el CI ingresado";
+     else if(existeLector && !existeMaterial)
+        cout << "\nNo existe material para el código ingresado";
+     else
+     {
+         Prestamo* nuevoPrestamo = new Prestamo(fechaPrestamo, diasPermitidos, material);
+
+         lector->agregarPrestamo(nuevoPrestamo);
+
+         imprimirPrestamos();
+     }
+}
+
 int main()
 {
     bool salir = false;
@@ -165,7 +242,38 @@ int main()
                 imprimirArregloLectores();
 
             }
-            if(numMenu == 6)
+            else if (numMenu == 2)
+            {
+                string ci;
+                string codigoMaterial;
+                int dia;
+                int mes;
+                int anio;
+                int diasPermitidos;
+
+                cout << "\nIngrese un CI: ";
+                cin >> ci;
+
+                cout << "\nIngrese un código existente de material: ";
+                cin >> codigoMaterial;
+
+                cout << "\nIngrese día del préstamo: ";
+                cin >> dia;
+
+                cout << "\nIngrese mes del préstamo: ";
+                cin >> mes;
+
+                cout << "\nIngrese año del préstamo: ";
+                cin >> anio;
+
+                cout << "\nDías permitidos: ";
+                cin >> diasPermitidos;
+
+                DtFecha* dt_fecha = new DtFecha(dia, mes, anio);
+
+                agregarPrestamo(ci, codigoMaterial, dt_fecha, diasPermitidos);
+            }
+            else if(numMenu == 6)
             {
                 string codigo;
                 string titulo;
