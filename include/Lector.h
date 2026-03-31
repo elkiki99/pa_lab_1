@@ -4,7 +4,7 @@
 #include <string>
 #include "Prestamo.h"
 
-#define MAX_PRESTAMOS 10
+#define MAX_PRESTAMOS 100
 
 using namespace std;
 
