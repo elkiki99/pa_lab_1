@@ -525,6 +525,11 @@ int main()
                             cout << "\n¿Es mensual? (si/no): ";
                             cin >> esMensual;
 
+                        do
+                        {
+                            cout << "\n¿Es mensual? (si/no): ";
+                            cin >> esMensual;
+
                         } while(esMensual != "si" && esMensual != "SI" && esMensual != "no" && esMensual != "NO");
 
                         if(esMensual == "si" || esMensual == "SI")
