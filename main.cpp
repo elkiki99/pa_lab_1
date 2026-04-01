@@ -8,6 +8,7 @@
 #include "include/DtLibro.h"
 #include "include/DtRevista.h"
 #include "include/DtMaterial.h"
+#include "include/Helpers.h"
 
 using namespace std;
 
@@ -20,47 +21,6 @@ int cantLectores = 0;
 Material** materiales = new Material*[MAX_MATERIALES];
 int cantMateriales = 0;
 
-void imprimirArregloMateriales()
-{
-    for(int i = 0; i < cantMateriales; i++)
-    {
-        DtMaterial* dt = materiales[i]->getDtMaterial();
-
-        dt->imprimir();
-        cout << "\n------------------\n" << endl;
-
-        delete dt;
-    }
-}
-
-void imprimirArregloLectores()
-{
-    for(int i = 0; i < cantLectores; i++)
-    {
-        Lector* lector = lectores[i];
-
-        cout << "- CI: " << lector->getCI() << endl;
-        cout << "- Nombre: " << lector->getNombre() << endl;
-        cout << "------------------\n";
-    }
-}
-
-
-bool fechaEsMenorA(DtFecha* a, DtFecha* b)
-{
-    if(a->getAnio() < b->getAnio())
-        return true;
-    else if(a->getAnio() > b->getAnio())
-        return false;
-
-    if(a->getMes() < b->getMes())
-        return true;
-    else if(a->getMes() > b->getMes())
-        return false;
-
-    return a->getDia() < b->getDia();
-}
-
 
 void registrarLector(string ci, string nombre, DtFecha* fechaRegistro)
 {
@@ -68,19 +28,20 @@ void registrarLector(string ci, string nombre, DtFecha* fechaRegistro)
     {
         if(lectores[i]->getCI() == ci)
         {
-            throw std::invalid_argument("Ya existe un lector con esa CI\n");
+            throw std::invalid_argument("Ya existe un lector con esa CI");
         }
     }
 
     if(cantLectores == MAX_LECTORES)
     {
-        throw std::invalid_argument("Capacidad máxima alcanzada\n");
+        throw std::invalid_argument("Capacidad máxima alcanzada");
     }
 
     Lector* nuevoLector = new Lector(ci, nombre, fechaRegistro);
     lectores[cantLectores++] = nuevoLector;
 
     cout << "\nNuevo lector registrado correctamente!\n";
+    imprimirArregloLectores();
 }
 
 void agregarPrestamo(string ci, string codigoMaterial, DtFecha* fechaPrestamo, int diasPermitidos)
@@ -112,18 +73,18 @@ void agregarPrestamo(string ci, string codigoMaterial, DtFecha* fechaPrestamo, i
      }
 
      if(!existeLector && !existeMaterial)
-        throw std::invalid_argument("No existe ni lector ni material para los datos ingresados\n");
+        throw std::invalid_argument("No existe ni lector ni material para los datos ingresados");
      else if(!existeLector && existeMaterial)
-        throw std::invalid_argument("No existe lector para el CI ingresado\n");
+        throw std::invalid_argument("No existe lector para el CI ingresado");
      else if(existeLector && !existeMaterial)
-        throw std::invalid_argument("No existe material para el código ingresado\n");
+        throw std::invalid_argument("No existe material para el código ingresado");
      else
      {
          Prestamo* nuevoPrestamo = new Prestamo(fechaPrestamo, diasPermitidos, material);
 
          lector->agregarPrestamo(nuevoPrestamo);
 
-         cout << "\nNuevo prestamo agregado correctamente!\n";
+         cout << "\nNuevo prestamo agregado correctamente!";
      }
 }
 
@@ -144,7 +105,7 @@ DtMaterial** obtenerMaterialesPrestados(string ci, int& cantMateriales)
 
     if(!existeLector)
     {
-        throw std::invalid_argument("No existe lector para el CI ingresado\n");
+        throw std::invalid_argument("No existe lector para el CI ingresado");
         cantMateriales = 0;
         return nullptr;
     }
@@ -155,19 +116,19 @@ DtMaterial** obtenerMaterialesPrestados(string ci, int& cantMateriales)
         DtMaterial** materiales_prestados = new DtMaterial*[cantMateriales];
 
         // impresión
-        cout << "- Lector: " << lector->getCI() << " - " << lector->getNombre() << endl;
+        cout << "\n- CI: " << lector->getCI() << " - Nombre: " << lector->getNombre() << endl;
 
         if(cantMateriales == 0)
         {
-            cout << "\t(sin préstamos)\n";
+            cout << "- Sin préstamos\n";
         }
 
         for(int i = 0; i < cantMateriales ; i++)
         {
             materiales_prestados[i] = prestamos_lector[i]->getMaterial()->getDtMaterial();
-            cout << "\tCódigo: " << materiales_prestados[i]->getCodigo() << endl;
-            cout << "\tTítulo: " << materiales_prestados[i]->getTitulo() << endl;
-            cout << "\t------------------\n";
+            cout << "- Código: " << materiales_prestados[i]->getCodigo() << endl;
+            cout << "- Título: " << materiales_prestados[i]->getTitulo() << endl;
+            cout << "------------------";
         }
 
         return materiales_prestados;
@@ -204,17 +165,17 @@ float consultarMultaMaterial(string ci, string codigoMaterial, int diasAtraso)
 
      if(!existeLector && !existeMaterial)
      {
-        throw std::invalid_argument("No existe ni lector ni material para los datos ingresados\n");
+        throw std::invalid_argument("No existe ni lector ni material para los datos ingresados");
         return -1;
      }
      else if(!existeLector && existeMaterial)
      {
-        throw std::invalid_argument("No existe lector para el CI ingresado\n");
+        throw std::invalid_argument("No existe lector para el CI ingresado");
         return -1;
      }
      else if(existeLector && !existeMaterial)
      {
-        throw std::invalid_argument("No existe material para el código ingresado\n");
+        throw std::invalid_argument("No existe material para el código ingresado");
         return -1;
      }
      else
@@ -235,12 +196,12 @@ float consultarMultaMaterial(string ci, string codigoMaterial, int diasAtraso)
 
          if(!existePrestamo)
          {
-            throw std::invalid_argument("No existe un préstamo asociado a este material y este lector\n");
+            throw std::invalid_argument("No existe un préstamo asociado a este material y este lector");
             return -1;
          }
          else
          {
-             cout << "- Multa: $" << material->calcularMulta(diasAtraso) << endl;
+             cout << "\n- Multa: $" << material->calcularMulta(diasAtraso) << endl;
              return material->calcularMulta(diasAtraso);
          }
      }
@@ -263,7 +224,7 @@ DtMaterial** verPrestamosAntesDeFecha(string ci, DtFecha* fecha, int& cantPresta
 
     if(!existeLector)
     {
-        throw std::invalid_argument("No existe lector para el CI ingresado\n");
+        throw std::invalid_argument("No existe lector para el CI ingresado");
         cantPrestamos = 0;
         return nullptr;
     }
@@ -283,14 +244,14 @@ DtMaterial** verPrestamosAntesDeFecha(string ci, DtFecha* fecha, int& cantPresta
 
         if(j == 0)
         {
-            cout << "\t(sin préstamos)\n";
+            cout << "\t(sin préstamos)";
         }
 
         for(int i = 0; i < j; i++)
         {
             cout << "\tCódigo: " << materiales_antes_de_fecha[i]->getCodigo() << endl;
             cout << "\tTítulo: " << materiales_antes_de_fecha[i]->getTitulo() << endl;
-            cout << "\t------------------\n";
+            cout << "\t------------------";
         }
 
         return materiales_antes_de_fecha;
@@ -305,14 +266,14 @@ void agregarMaterial(DtMaterial* dtMaterial)
     {
         if(materiales[i]->getCodigo() == codigo)
         {
-            throw std::invalid_argument("Ya existe un material con ese código\n");
+            throw std::invalid_argument("Ya existe un material con ese código");
             return;
         }
     }
 
     if(cantMateriales == MAX_MATERIALES)
     {
-        throw std::invalid_argument("Capacidad máxima alcanzada\n");
+        throw std::invalid_argument("Capacidad máxima alcanzada");
         return;
     }
 
@@ -374,10 +335,11 @@ int main()
                 int anio;
 
                 cout << "\nIngrese CI: ";
-                cin >> ci;
+                cin.ignore(); // Limpia el buffer
+                getline(cin, ci); // permite espacios para strings
 
                 cout << "\nIngrese un nombre: ";
-                cin >> nombre;
+                getline(cin, nombre);
 
                 cout << "\nIngrese día de registro: ";
                 cin >> dia;
@@ -388,18 +350,15 @@ int main()
                 cout << "\nIngrese año de registro: ";
                 cin >> anio;
 
-                DtFecha* dt_fecha = new DtFecha(dia, mes, anio);
-
                 try
                 {
+                    DtFecha* dt_fecha = validarFecha(dia, mes, anio);
                     registrarLector(ci, nombre, dt_fecha);
                 }
                 catch(const std::invalid_argument& e)
                 {
                     cout << "\nError: " << e.what() << endl;
                 }
-                imprimirArregloLectores();
-
             }
             else if (numMenu == 2)
             {
@@ -411,10 +370,11 @@ int main()
                 int diasPermitidos;
 
                 cout << "\nIngrese un CI: ";
-                cin >> ci;
+                cin.ignore();
+                getline(cin, ci);
 
                 cout << "\nIngrese un código existente de material: ";
-                cin >> codigoMaterial;
+                getline(cin, codigoMaterial);
 
                 cout << "\nIngrese día del préstamo: ";
                 cin >> dia;
@@ -428,10 +388,9 @@ int main()
                 cout << "\nDías permitidos: ";
                 cin >> diasPermitidos;
 
-                DtFecha* dt_fecha = new DtFecha(dia, mes, anio);
-
                 try
                 {
+                    DtFecha* dt_fecha = validarFecha(dia, mes, anio);
                     agregarPrestamo(ci, codigoMaterial, dt_fecha, diasPermitidos);
                 }
                 catch(const std::invalid_argument& e)
@@ -445,7 +404,8 @@ int main()
                 int cantPrestamos;
 
                 cout << "\nIngrese una cédula válida: ";
-                cin >> ci;
+                cin.ignore(); // Limpia el buffer
+                getline(cin, ci);
 
                 try
                 {
@@ -463,10 +423,11 @@ int main()
                 int diasAtraso;
 
                 cout << "\nIngrese una cédula válida: ";
-                cin >> ci;
+                cin.ignore(); // Limpia el buffer
+                getline(cin, ci);
 
                 cout << "\nIngrese un código de material válido: ";
-                cin >> codigoMaterial;
+                getline(cin, codigoMaterial);
 
                 cout << "\nIngrese los días de atraso: ";
                 cin >> diasAtraso;
@@ -489,7 +450,8 @@ int main()
                 int cantPrestamos;
 
                 cout << "\nIngrese CI: ";
-                cin >> ci;
+                cin.ignore(); // Limpia el buffer
+                getline(cin, ci);
 
                 cout << "\nIngrese día límite: ";
                 cin >> dia;
@@ -500,10 +462,9 @@ int main()
                 cout << "\nIngrese año límite: ";
                 cin >> anio;
 
-                DtFecha* dt_fecha = new DtFecha(dia, mes, anio);
-
                 try
                 {
+                    DtFecha* dt_fecha = validarFecha(dia, mes, anio);
                     verPrestamosAntesDeFecha(ci, dt_fecha, cantPrestamos);
                 }
                 catch(const std::invalid_argument& e)
@@ -518,10 +479,11 @@ int main()
                 int anioPublicacion;
 
                 cout << "\nIngrese un codigo: ";
-                cin >> codigo;
+                cin.ignore(); // Limpia el buffer
+                getline(cin, codigo);
 
                 cout << "\nIngrese un título: ";
-                cin >> titulo;
+                getline(cin, titulo);
 
                 cout << "\nIngrese un año de publicación: ";
                 cin >> anioPublicacion;
@@ -534,22 +496,25 @@ int main()
                     cout << "\nLibro o Revista? (l/r): ";
                     cin >> tipoMaterial;
 
-                    if(tipoMaterial == "l")
+                    if(tipoMaterial == "l" || tipoMaterial == "L")
                     {
-                        cout << "\nIngrese un autor: ";
                         string autor;
-                        cin >> autor;
+                        int cantPaginas;
+
+                        cout << "\nIngrese un autor: ";
+                        cin.ignore(); // Limpia el buffer
+                        getline(cin, autor);
 
                         cout << "\nIngrese la cantidad de páginas: ";
-                        int cantPaginas;
                         cin >> cantPaginas;
 
                         dt = new DtLibro(codigo, titulo, anioPublicacion, autor, cantPaginas);
 
-                    } else if(tipoMaterial == "r") {
+                    } else if(tipoMaterial == "r" || tipoMaterial == "R") {
 
                         int numeroEdicion;
                         string esMensual = "";
+
                         bool esMensualBool;
 
                         cout << "\nIngrese el número de edición: ";
@@ -560,17 +525,16 @@ int main()
                             cout << "\n¿Es mensual? (si/no): ";
                             cin >> esMensual;
 
-                        } while(esMensual != "si" && esMensual != "no");
+                        } while(esMensual != "si" && esMensual != "SI" && esMensual != "no" && esMensual != "NO");
 
-                        if(esMensual == "si")
+                        if(esMensual == "si" || esMensual == "SI")
                             esMensualBool = true;
                         else
                             esMensualBool = false;
 
                         dt = new DtRevista(codigo, titulo, anioPublicacion, numeroEdicion, esMensualBool);
                     }
-
-                } while (tipoMaterial != "l" && tipoMaterial != "r");
+                } while (tipoMaterial != "l" && tipoMaterial != "L" && tipoMaterial != "r" && tipoMaterial != "R");
 
                 try
                 {
